@@ -12,7 +12,7 @@
   "keywords": ["dolphincss", "css", "autocomplete", "intellisense", "tailwind"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Phuyalshankar/dolphincss-vscode"
+    "url": "https://github.com/Phuyalshankar/dolphincss-vscode-.git"
   },
   "activationEvents": ["onStartupFinished"],
   "main": "./out/extension.js",
