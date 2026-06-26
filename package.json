@@ -1,0 +1,62 @@
+{
+  "name": "dolphincss-intellisense",
+  "displayName": "DolphinCSS IntelliSense",
+  "description": "Tailwind-like autocomplete for DolphinCSS — class names, dolphin-* markers, and component previews",
+  "version": "0.1.0",
+  "publisher": "Phuyalshankar",
+  "icon": "images/icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other", "Snippets"],
+  "keywords": ["dolphincss", "css", "autocomplete", "intellisense", "tailwind"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Phuyalshankar/dolphincss-vscode"
+  },
+  "activationEvents": ["onStartupFinished"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "DolphinCSS IntelliSense",
+      "properties": {
+        "dolphincss.tagsUrl": {
+          "type": "string",
+          "default": "https://raw.githubusercontent.com/Phuyalshankar/dolphincss-template/main/config/dolphin-tags.json",
+          "description": "GitHub URL for dolphin-tags.json (custom repo support)"
+        },
+        "dolphincss.markersUrl": {
+          "type": "string",
+          "default": "https://raw.githubusercontent.com/Phuyalshankar/dolphincss-template/main/config/markers.json",
+          "description": "GitHub URL for markers.json"
+        },
+        "dolphincss.autoRefreshHours": {
+          "type": "number",
+          "default": 24,
+          "description": "GitHub बाट data refresh गर्ने interval (hours)"
+        },
+        "dolphincss.enableClassSuggestions": {
+          "type": "boolean",
+          "default": true,
+          "description": "CSS class name suggestions enable/disable"
+        },
+        "dolphincss.enableMarkerSuggestions": {
+          "type": "boolean",
+          "default": true,
+          "description": "dolphin-* marker suggestions enable/disable"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "npx @vscode/vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
+  }
+}
