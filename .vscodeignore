@@ -1,4 +1,8 @@
-out/
-node_modules/
-.vscode-test/
+.vscode/**
+.vscode-test/**
+.git/**
+.gitignore
+tsconfig.json
+src/**
+node_modules/**
 *.vsix
