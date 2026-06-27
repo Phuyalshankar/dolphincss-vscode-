@@ -5,17 +5,27 @@ import { DolphinFetcher, FetchedData } from './fetcher';
 function getClassContext(
   document: vscode.TextDocument,
   position: vscode.Position
-): { inClass: boolean; inMarker: boolean; partial: string } {
+): { inClass: boolean; inMarker: boolean; inUb: boolean; partial: string } {
   const lineText = document.lineAt(position).text;
   const charIndex = position.character;
 
   // cursor अगाडिको text
   const textBefore = lineText.substring(0, charIndex);
 
+  // ub('...') वा ub("...") pattern detect — cursor string भित्र छ?
+  // जस्तै: ub('filled primary |') वा ub("glass glow |")
+  const ubMatch = textBefore.match(/\bub\s*\(\s*['"]([^'"]*?)$/);
+  if (ubMatch) {
+    const currentValue = ubMatch[1];
+    const parts = currentValue.split(/\s+/);
+    const partial = parts[parts.length - 1] ?? '';
+    return { inClass: true, inMarker: false, inUb: true, partial };
+  }
+
   // class="..." वा className="..." pattern detect
-  const classMatch = textBefore.match(/(?:class|className)=["']([^"']*)$/);
+  const classMatch = textBefore.match(/(?:class|className)=[\"']([^\"']*)$/);
   if (!classMatch) {
-    return { inClass: false, inMarker: false, partial: '' };
+    return { inClass: false, inMarker: false, inUb: false, partial: '' };
   }
 
   const currentValue = classMatch[1];
@@ -26,7 +36,7 @@ function getClassContext(
   // dolphin- बाट सुरु भएको छ?
   const inMarker = partial.startsWith('dolphin-');
 
-  return { inClass: true, inMarker, partial };
+  return { inClass: true, inMarker, inUb: false, partial };
 }
 
 export class DolphinCompletionProvider implements vscode.CompletionItemProvider {
@@ -57,6 +67,29 @@ export class DolphinCompletionProvider implements vscode.CompletionItemProvider 
     if (!ctx.inClass) return [];
 
     const items: vscode.CompletionItem[] = [];
+
+    // ── UB string argument mode ──────────────────────────────────────────
+    // ub('...') भित्र cursor छ — CSS class suggestions मात्र देखाउने
+    if (ctx.inUb) {
+      if (!enableClass) return [];
+      for (const cls of this.data.classes) {
+        const item = new vscode.CompletionItem(
+          cls.name,
+          vscode.CompletionItemKind.Value
+        );
+        item.detail = `🐬 ub() — DolphinCSS class`;
+        item.documentation = new vscode.MarkdownString(
+          `**${cls.name}**\n\n` +
+          (cls.description ?? 'DolphinCSS utility class') + '\n\n' +
+          `*Usage:* \`ub('${cls.name}')\``
+        );
+        item.sortText = `2_${cls.name}`;
+        items.push(item);
+      }
+      return items;
+    }
+
+    // ── className / class attribute mode ────────────────────────────────
 
     // 1. dolphin-* marker suggestions
     if (enableMarker && (ctx.inMarker || ctx.partial === '')) {

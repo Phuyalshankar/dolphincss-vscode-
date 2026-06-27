@@ -41,7 +41,7 @@ export async function activate(context: vscode.ExtensionContext) {
     'javascript', 'typescript', 'vue', 'svelte', 'astro', 'php'
   ];
 
-  const triggerChars = ['"', "'", ' '];
+  const triggerChars = ['"', "'", ' ', '('];
 
   for (const lang of supportedLanguages) {
     const disposable = vscode.languages.registerCompletionItemProvider(
