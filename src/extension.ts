@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { DolphinFetcher } from './fetcher';
 import { DolphinCompletionProvider } from './provider';
+import { UBCompletionProvider } from './ubProvider';
 
 let statusBarItem: vscode.StatusBarItem;
 let fetcher: DolphinFetcher;
@@ -57,6 +58,19 @@ export async function activate(context: vscode.ExtensionContext) {
     await refreshData(true);
   });
   context.subscriptions.push(refreshCmd);
+
+  // 🐬 UB Function Argument IntelliSense
+  // bg('blue', |), p(|), m(|), w(|), h(|), map.|, oklch('red', |), etc.
+  const ubProvider = new UBCompletionProvider();
+  const ubTriggers = ["'", '"', '(', '.', ',', ' '];
+  for (const lang of supportedLanguages) {
+    const ubDisposable = vscode.languages.registerCompletionItemProvider(
+      { language: lang },
+      ubProvider,
+      ...ubTriggers
+    );
+    context.subscriptions.push(ubDisposable);
+  }
 
   // Startup मा data load
   await refreshData(false);
