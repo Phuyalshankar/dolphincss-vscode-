@@ -52,6 +52,15 @@ shadow('|')       // → 'sm', 'md', 'lg', 'xl', '2xl', 'none'
 opacity(|)        // → 0–100
 ```
 
+### 3b. 🎯 `ub('...')` Dynamic Class Suggestions *(v0.2.1)*
+Inside `ub('...')` string arguments, get full **0–255 dynamic class names**:
+
+```js
+ub('|')           // → bg-blue-128, text-red-64, p-16, m-32, w-255, gap-8 ...
+ub('bg-blue-|')   // → bg-blue-0 ... bg-blue-255
+ub('p-|')         // → p-0 ... p-255
+```
+
 ### 4. 🔄 Auto-Sync from GitHub
 Fetches the latest classes and markers from the DolphinCSS template repository every **24 hours** automatically. Click the `🐬` status bar item to refresh instantly.
 
@@ -88,12 +97,12 @@ Customize in VS Code `settings.json`:
 
 **Option A — VSIX (recommended):**
 ```bash
-code --install-extension dolphincss-intellisense-0.2.0.vsix
+code --install-extension dolphincss-intellisense-0.2.1.vsix
 ```
 
 **Option B — Download from GitHub Releases:**
 ```bash
-curl -L -o dolphincss-intellisense.vsix https://github.com/Phuyalshankar/dolphincss-vscode-/releases/download/v0.2.0/dolphincss-intellisense-0.2.0.vsix
+curl -L -o dolphincss-intellisense.vsix https://github.com/Phuyalshankar/dolphincss-vscode-/releases/download/v0.2.1/dolphincss-intellisense-0.2.1.vsix
 code --install-extension dolphincss-intellisense.vsix
 ```
 
@@ -101,10 +110,15 @@ code --install-extension dolphincss-intellisense.vsix
 
 ## 📋 Changelog
 
+### v0.2.1
+- ✨ **Dynamic 0–255 class suggestions inside `ub('...')`** — `bg-blue-128`, `p-16`, `m-32`, `w-255`, etc.
+- ✨ Color range classes: `bg-*`, `text-*`, `border-color-*`, `shadow-color-*` (9 colors × 256 shades)
+- ✨ Spacing/size classes: `p`, `m`, `w`, `h`, `gap`, `rounded`, `opacity`, and more
+
 ### v0.2.0
 - ✨ **UB Function Argument IntelliSense** — shade 0-255, color names, map methods, layout options
 - ✨ `ub('...')` string argument CSS class suggestions
-- ⚡ Auto-install via `vscode-init` marker now installs v0.2.0
+- ⚡ Auto-install via `vscode-init` marker now installs v0.2.1
 
 ### v0.1.0
 - 🎉 Initial release
